@@ -1,15 +1,22 @@
+// app/api/todos/[id]/route.ts
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-// App Router API handlers use this type for context
 export async function DELETE(
-  req: Request,
+  request: Request,
   context: { params: { id: string } }
 ) {
   const id = parseInt(context.params.id);
-  await prisma.todo.delete({
-    where: { id },
-  });
 
-  return NextResponse.json({ success: true });
+  if (isNaN(id)) {
+    return new NextResponse("Invalid ID", { status: 400 });
+  }
+
+  try {
+    await prisma.todo.delete({ where: { id } });
+    return NextResponse.json({ success: true });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    return new NextResponse("Failed to delete", { status: 500 });
+  }
 }
