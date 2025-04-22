@@ -10,7 +10,7 @@ export async function PATCH(
     data: {
       completed: {
         set: true,
-        not: true,
+        // not: true,
       },
     },
   });
