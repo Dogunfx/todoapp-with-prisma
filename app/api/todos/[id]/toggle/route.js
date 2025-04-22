@@ -1,12 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function PATCH(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(req, { params }) {
+  const { id } = await params;
   const todo = await prisma.todo.update({
-    where: { id: Number(params.id) },
+    where: { id: Number(id) },
     data: {
       completed: {
         set: true,
